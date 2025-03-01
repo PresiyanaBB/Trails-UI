@@ -11,29 +11,28 @@ nav {
     background-color: transparent;
 }
 
+.header-container {
+    /* background-image: url('/path-to-your-cityscape-graffiti-image.jpg'); */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+}
+
+.nav-link {
+    transition: color 0.3s ease-in-out;
+    font-family: 'Graffiti Font', sans-serif;
+}
+
+.nav-link:hover {
+    color: purple;
+    font-weight: bold;
+}
+
 .animated-logo {
     transition: transform 0.3s ease-in-out;
 }
 
 .animated-logo:hover {
     transform: scale(1.2);
-}
-
-.nav-link {
-    transition: color 0.3s ease-in-out;
-}
-
-.nav-link:hover {
-    color: #ff6347;
-    /* Your chosen color */
-}
-
-.dropdown-menu {
-    background-color: #f8f9fa;
-    /* Same as the navbar background */
-}
-
-.dropdown-item:hover {
-    background-color: #e9ecef;
-    /* Lighter shade for hover effect */
 }

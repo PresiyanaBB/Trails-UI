@@ -3,7 +3,7 @@ import '../styles/header.css';
 
 const HeaderComponent = () => {
     return (
-        <header>
+        <header className="header-container">
             <nav className="navbar navbar-expand-md navbar-light">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="index.html">
