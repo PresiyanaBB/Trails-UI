@@ -1,16 +1,22 @@
-import './App.css'
 import FooterComponent from './components/FooterComponent'
 import HeaderComponent from './components/HeaderComponent'
-import ListArtistComponent from './components/ListArtistComponent'
+import ArtistComponent from './components/ArtistComponent'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import CreateArtistComponent from './components/CreateArtistComponent'
+import '../src/styles/common.css'
 
 function App() {
 
   return (
     <>
-      <HeaderComponent />
-      <ListArtistComponent />
-      <FooterComponent />
-
+      <BrowserRouter>
+        <HeaderComponent />
+        <Routes>
+          <Route path="/artists" element={<ArtistComponent />} />
+          <Route path="/admin/add-artist" element={<CreateArtistComponent />} />
+        </Routes>
+        <FooterComponent />
+      </BrowserRouter >
     </>
   )
 }

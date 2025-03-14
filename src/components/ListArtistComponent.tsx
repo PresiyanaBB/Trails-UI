@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { listArtists } from '../services/ArtistService';
+import { getArtists } from '../api/ArtistApi';
 
 function ListArtistComponent() {
     const [artists, setArtists] = useState<{ id: string; name: string; description: string; instagram_url: string }[]>([]);
 
     React.useEffect(() => {
-        listArtists().then((response) => {
+        getArtists().then((response) => {
             setArtists(response.data);
         }).catch((error) => {
             console.error(error);
@@ -25,7 +25,7 @@ function ListArtistComponent() {
                 </thead>
                 <tbody>
                     {artists.map((artist) => (
-                        <tr key={artist.id}>
+                        <tr key={artist.name}>
                             <td>{artist.name}</td>
                             <td>{artist.description}</td>
                             <td>{artist.instagram_url}</td>
