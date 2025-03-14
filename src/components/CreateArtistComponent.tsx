@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Project } from "../utils/models";
+import { Project } from "../models";
 import { createArtist } from "../api/ArtistApi";
 
 const CreateArtist: React.FC = () => {

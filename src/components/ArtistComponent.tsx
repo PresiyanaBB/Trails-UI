@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getArtists } from '../api/ArtistApi';
-import { Artist } from '../utils/models';
+import { Artist } from '../models';
 
 function ArtistComponent() {
     const [artists, setArtists] = useState<Artist[]>([]);
