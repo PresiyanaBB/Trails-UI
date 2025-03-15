@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Project } from "../models";
 import { createArtist } from "../api/ArtistApi";
 import { getProjects, findProjectByName } from "../api/ProjectApi";
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
 const CreateArtist: React.FC = () => {
+    const navigate = useNavigate(); // Initialize navigate function
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [instagramUrl, setInstagramUrl] = useState("");
@@ -86,11 +88,10 @@ const CreateArtist: React.FC = () => {
             is_project_existing: finalIsProjectExisting
         };
 
-        console.log("📦 Sending JSON:", JSON.stringify(payload, null, 2));
-
         try {
-            const response = await createArtist(payload);
-            console.log("✅ Request successful:", response.data);
+            await createArtist(payload);
+            console.log("✅ Request sent successfully!");
+            navigate("/artists");
         } catch (error) {
             if (error instanceof Error) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
