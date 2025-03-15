@@ -1,8 +1,9 @@
 import FooterComponent from './components/FooterComponent'
 import HeaderComponent from './components/HeaderComponent'
-import ArtistComponent from './components/ArtistComponent'
+import ArtistComponent from './components/artist/ArtistComponent'
+import ProjectComponent from './components/project/ProjectComponent'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import CreateArtistComponent from './components/CreateArtistComponent'
+import CreateArtistComponent from './components/artist/CreateArtistComponent'
 import '../src/styles/common.css'
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/artists" element={<ArtistComponent />} />
           <Route path="/admin/add-artist" element={<CreateArtistComponent />} />
+          <Route path="/gallery" element={<ProjectComponent />} />
         </Routes>
         <FooterComponent />
       </BrowserRouter >

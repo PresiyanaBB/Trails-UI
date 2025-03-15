@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getArtists } from '../api/ArtistApi';
-import { Artist } from '../models';
+import { getArtists } from '../../api/ArtistApi';
+import { Artist } from '../../models';
 
 function ArtistComponent() {
     const [artists, setArtists] = useState<Artist[]>([]);
@@ -33,7 +33,7 @@ function ArtistComponent() {
 
     return (
         <div className="container">
-            <h1>List Artist</h1>
+            <h1>List Artists</h1>
             <table className="table table-striped table-bordered">
                 <thead>
                     <tr>

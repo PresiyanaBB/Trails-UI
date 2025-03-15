@@ -3,3 +3,9 @@ img.artist-image {
     height: flex;
     object-fit: cover;
 }
+
+img.project-image {
+    width: 50px;
+    height: flex;
+    object-fit: cover;
+}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Project } from "../models";
-import { createArtist } from "../api/ArtistApi";
-import { getProjects, findProjectByName } from "../api/ProjectApi";
+import { Project } from "../../models";
+import { createArtist } from "../../api/ArtistApi";
+import { getProjects, findProjectByName } from "../../api/ProjectApi";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
 const CreateArtist: React.FC = () => {
