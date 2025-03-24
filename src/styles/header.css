@@ -11,14 +11,14 @@ body {
 
 #logo-to-home-page {
     width: auto;
-    height: 40vh;
+    height: 30vh;
     cursor: pointer;
-    margin-left: 10rem;
-    margin-top: -4.5rem;
+    margin-left: 14.5rem;
+    margin-top: -3rem;
 }
 
 .collapse.navbar-collapse {
-    margin-top: -7.5rem;
+    margin-top: -5rem;
     margin-right: 9vw;
     color: white;
 }
@@ -30,9 +30,9 @@ body {
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
     /* Using calc() to combine rem and vw for font-size */
-    font-size: calc(1rem + 0.5vw);
+    font-size: calc(1rem + 0.7vw);
     /* Adjust the values as necessary */
-    margin-right: 1.5vw;
+    margin-right: 1vw;
 }
 
 .nav-link:hover {
@@ -56,19 +56,43 @@ body {
         font-size: calc(0.5rem + 0.5vw);
         /* Adjust for medium screens */
     }
+
+    .collapse.navbar-collapse {
+        margin-top: -4rem;
+        margin-right: -5vw;
+    }
+
+    #logo-to-home-page {
+        margin-left: 13rem;
+    }
 }
 
 @media (max-width: 1024px) {
     .nav-link {
         font-size: calc(0.2rem + 0.2vw);
         /* Adjust for smaller screens */
+        margin-right: 1vw;
+    }
+
+    .collapse.navbar-collapse {
+        margin-top: -4rem;
+        margin-right: -5vw;
+    }
+
+    #logo-to-home-page {
+        margin-left: 13rem;
     }
 }
 
 @media (max-width: 992px) {
     .nav-link {
-        font-size: calc(1rem + 0.8vw);
+        font-size: calc(0.1rem + 0.1vw);
         /* Adjust for even smaller screens */
+        margin-right: 1vw;
+    }
+
+    .collapse.navbar-collapse {
+        margin-top: -2rem;
     }
 }
 
