@@ -1,32 +1,46 @@
-/* HeaderComponent.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+
+body {
+    background-image: url('/background_header.png');
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    background-position: top center;
+    background-repeat: no-repeat;
+}
+
 #logo-to-home-page {
     width: auto;
-    height: 40px;
+    height: 40vh;
     cursor: pointer;
+    margin-left: 10rem;
+    margin-top: -4.5rem;
 }
 
-nav {
-    display: flex;
-    justify-content: space-between;
-    background-color: transparent;
-}
-
-.header-container {
-    /* background-image: url('/path-to-your-cityscape-graffiti-image.jpg'); */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: #fff;
+.collapse.navbar-collapse {
+    margin-top: -7.5rem;
+    margin-right: 9vw;
+    color: white;
 }
 
 .nav-link {
     transition: color 0.3s ease-in-out;
-    font-family: 'Graffiti Font', sans-serif;
+    color: white;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    /* Using calc() to combine rem and vw for font-size */
+    font-size: calc(1rem + 0.5vw);
+    /* Adjust the values as necessary */
+    margin-right: 1.5vw;
 }
 
 .nav-link:hover {
-    color: purple;
-    font-weight: bold;
+    color: #F9AF28;
+}
+
+.nav-link.active {
+    color: #F9AF28 !important;
 }
 
 .animated-logo {
@@ -35,4 +49,39 @@ nav {
 
 .animated-logo:hover {
     transform: scale(1.2);
+}
+
+@media (max-width: 1200px) {
+    .nav-link {
+        font-size: calc(0.5rem + 0.5vw);
+        /* Adjust for medium screens */
+    }
+}
+
+@media (max-width: 1024px) {
+    .nav-link {
+        font-size: calc(0.2rem + 0.2vw);
+        /* Adjust for smaller screens */
+    }
+}
+
+@media (max-width: 992px) {
+    .nav-link {
+        font-size: calc(1rem + 0.8vw);
+        /* Adjust for even smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-link {
+        font-size: calc(1rem + 2vw);
+        /* Larger scaling for mobile */
+    }
+}
+
+@media (max-width: 600px) {
+    .nav-link {
+        font-size: calc(1rem + 2.5vw);
+        /* Even larger scaling for small devices */
+    }
 }

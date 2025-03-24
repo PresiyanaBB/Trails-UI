@@ -16,7 +16,7 @@ function App() {
         <Routes>
           <Route path="/artists" element={<ArtistComponent />} />
           <Route path="/admin/add-artist" element={<CreateArtistComponent />} />
-          <Route path="/gallery" element={<ProjectComponent />} />
+          <Route path="/archive" element={<ProjectComponent />} />
           <Route path="/admin/add-project" element={<CreateProjectComponent />} />
         </Routes>
         <FooterComponent />

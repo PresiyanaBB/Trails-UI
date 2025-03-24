@@ -84,7 +84,7 @@ const CreateProject: React.FC = () => {
         try {
             await createProject(payload);
             console.log("Project created successfully!");
-            navigate("/gallery");
+            navigate("/archive");
         } catch (error) {
             console.error("Error creating project:", error);
         }
