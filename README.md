@@ -1,50 +1,30 @@
-# React + TypeScript + Vite
+# Welcome to the frontend part of Trails 👋
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+Trails is a personal project that showcases various locations across Bulgaria where artists have created public artworks, such as graffiti and mosaics. The project was developed to encourage artists to contribute to making their cities more vibrant and enjoyable places to live.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+People feel better when they see beautiful artwork on building walls, rather than the typical, monotonous facades reminiscent of the communist era. This is precisely our mission — to inspire positive emotions and attract visitors to experience the beauty of our amazing country.
 
-## Expanding the ESLint configuration
+This is the user interface of Trails. Here, you can view the Artists and Projects tables, access our contact information, and navigate through the index page. You can also add new artists and projects to the platform.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+# Get started
 
-- Configure the top-level `parserOptions` property like this:
+## Backend - Trails
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. create in /src/main/resources/secret.properties
+   - add the following according to you:
+    ```
+    spring.datasource.url=
+    spring.datasource.username=
+    spring.datasource.password=
+    ```
+2. Must have sdk 23.02
+3. Run TrailApplication - it runs on http://localhost:8080
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Frontend - Trails-UI
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+1. run `npm install`
+2. run `npm run dev`
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+###### The frontend must run on http://localhost:5500 , if you use another port in the backend (Trails) in trails/clients/CorsConfig you must set your port
