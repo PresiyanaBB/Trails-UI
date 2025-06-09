@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getProjects } from '../../api/ProjectApi';
 import { Project } from '../../models';
+import '../../styles/project.css';
 
 function ProjectComponent() {
     const [projects, setProjects] = useState<Project[]>([]);
@@ -32,9 +33,9 @@ function ProjectComponent() {
     };
 
     return (
-        <div className="container">
-            <h1>List Projects</h1>
-            <table className="table table-striped table-bordered">
+        <div className="project-container">
+            <h1 className="project-title">List Projects</h1>
+            <table className="project-table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -47,23 +48,39 @@ function ProjectComponent() {
                 <tbody>
                     {projects.map((project) => (
                         <tr key={project.name}>
-                            <td>{project.name}</td>
-                            <td>{project.location.name} : {project.location.map_address}</td>
-                            <td>{project.youtube_url}</td>
+                            <td>
+                                <div className="project-name">{project.name}</div>
+                            </td>
+                            <td>
+                                <div className="project-description">{project.location.name} : {project.location.map_address}</div>
+                            </td>
+                            <td>
+                                <a
+                                    href={project.youtube_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="project-youtube"
+                                >
+                                    {project.youtube_url}
+                                </a>
+                            </td>
                             <td>
                                 {imageUrls[project.name] ? (
-                                    <img className='project-image'
+                                    <img
+                                        className="project-image"
                                         src={imageUrls[project.name]}
                                         alt={project.name}
                                     />
                                 ) : (
-                                    <span>Loading...</span>
+                                    <span className="loading-text">Loading...</span>
                                 )}
                             </td>
                             <td>
-                                {project.artists
-                                    ? project.artists.map((artist) => artist.name).join(", ")
-                                    : "No artists available"}
+                                <div className="project-artists">
+                                    {project.artists
+                                        ? project.artists.map((artist) => artist.name).join(", ")
+                                        : "No artists available"}
+                                </div>
                             </td>
                         </tr>
                     ))}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getArtists } from '../../api/ArtistApi';
 import { Artist } from '../../models';
+import '../../styles/artist.css'
 
 function ArtistComponent() {
     const [artists, setArtists] = useState<Artist[]>([]);
@@ -32,38 +33,54 @@ function ArtistComponent() {
     };
 
     return (
-        <div className="container">
-            <h1>List Artists</h1>
-            <table className="table table-striped table-bordered">
+        <div className="artist-container">
+            <h1 className="artist-title">Our Artists</h1>
+            <table className="artist-table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Instagram</th>
-                        <th>Image</th>
+                        <th>Artist</th>
+                        <th>About</th>
+                        <th>Social</th>
+                        <th>Portfolio</th>
                         <th>Projects</th>
                     </tr>
                 </thead>
                 <tbody>
                     {artists.map((artist) => (
                         <tr key={artist.name}>
-                            <td>{artist.name}</td>
-                            <td>{artist.description}</td>
-                            <td>{artist.instagram_url}</td>
+                            <td>
+                                <div className="artist-name">{artist.name}</div>
+                            </td>
+                            <td>
+                                <div className="artist-description">{artist.description}</div>
+                            </td>
+                            <td>
+                                <a
+                                    href={artist.instagram_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="artist-instagram"
+                                >
+                                    @{artist.instagram_url.split('/').pop()}
+                                </a>
+                            </td>
                             <td>
                                 {imageUrls[artist.name] ? (
-                                    <img className='artist-image'
+                                    <img
+                                        className="artist-image"
                                         src={imageUrls[artist.name]}
-                                        alt={artist.name}
+                                        alt={`${artist.name}'s portfolio`}
                                     />
                                 ) : (
-                                    <span>Loading...</span>
+                                    <span className="loading-text">Loading...</span>
                                 )}
                             </td>
                             <td>
-                                {artist.projects
-                                    ? artist.projects.map((project) => project.name).join(", ")
-                                    : "No projects available"}
+                                <div className="artist-projects">
+                                    {artist.projects
+                                        ? artist.projects.map((project) => project.name).join(", ")
+                                        : "No projects available"}
+                                </div>
                             </td>
                         </tr>
                     ))}
