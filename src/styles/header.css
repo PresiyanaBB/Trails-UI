@@ -2,11 +2,13 @@
 
 .header-container {
     width: 100%;
+    background-color: #87CEEB;
     background-image: url('/background_header.png');
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
     padding: 0.5rem 0;
+    position: relative;
 }
 
 .header-content {
