@@ -1,22 +1,28 @@
 import { useState, useEffect } from "react";
 import { Project } from "../../models";
 import { createArtist } from "../../api/ArtistApi";
-import { getProjects, findProjectByName } from "../../api/ProjectApi";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { getProjects, getProject } from "../../api/ProjectApi";
+import { useNavigate } from "react-router-dom";
 
 const CreateArtist: React.FC = () => {
-    const navigate = useNavigate(); // Initialize navigate function
+    const navigate = useNavigate();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [instagramUrl, setInstagramUrl] = useState("");
     const [image, setImage] = useState<{ mimetype: string; data: string }>({ mimetype: "", data: "" });
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [, setIsProjectExisting] = useState<boolean[]>([]);
+    const [project, setProject] = useState<Project>({
+        id: "",
+        name: "",
+        location: { id: "", name: "", map_address: "" },
+        image: { id: "", mimetype: "", data: "" },
+        youtube_url: "",
+        artists: null
+    });
+    const [, setIsProjectExisting] = useState<boolean>();
     const [projectOptions, setProjectOptions] = useState<Project[]>([]);
     const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-    // Fetch available projects
     useEffect(() => {
         getProjects()
             .then((response) => {
@@ -25,24 +31,30 @@ const CreateArtist: React.FC = () => {
             .catch((error) => console.error("Error fetching projects:", error));
     }, []);
 
-    // Fetch selected project details
     useEffect(() => {
         if (selectedProjectId) {
-            findProjectByName(selectedProjectId)
+            getProject(selectedProjectId)
                 .then((response) => {
                     const projectData = response.data as Project;
-                    setSelectedProject(projectData);  // Store the selected project
-                    setIsProjectExisting([true]); // Mark as existing project
+                    setSelectedProject(projectData);
+                    setIsProjectExisting(true);
                 })
                 .catch((error) => console.error("Error fetching project details:", error));
         } else {
             setSelectedProject(null);
-            setProjects([]);
-            setIsProjectExisting([]); // Reset when no project is selected
+            setProject({
+                id: "",
+                name: "",
+                location: { id: "", name: "", map_address: "" },
+                image: { id: "", mimetype: "", data: "" },
+                youtube_url: "",
+                artists: null
+            });
+            setIsProjectExisting(undefined);
         }
     }, [selectedProjectId]);
 
-    // Handle image upload
+
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setImageFn: (img: { mimetype: string; data: string }) => void) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -58,46 +70,47 @@ const CreateArtist: React.FC = () => {
     };
 
     const sendRequest = async () => {
-        let finalProjects: Project[] = [];
-        let finalIsProjectExisting: boolean[] = [];
+        let finalProject: Project;
+        let finalIsProjectExisting: boolean;
 
         if (selectedProjectId) {
-            // ✅ If an existing project is selected, fetch full project details
             try {
-                const response = await findProjectByName(selectedProjectId);
+                const response = await getProject(selectedProjectId);
                 const projectData = response.data as Project;
-                finalProjects = [projectData]; // Add the full project data (without wrapping it in another array)
-                finalIsProjectExisting = [true]; // Mark as existing project
+                finalProject = projectData;
+                finalIsProjectExisting = true;
             } catch (error) {
-                console.error("❌ Error fetching project details:", error);
-                return; // Prevent sending incomplete data
+                console.error("Error fetching project details:", error);
+                return;
             }
         } else {
-            // ✅ Otherwise, use manually entered projects
-            finalProjects = projects;
-            finalIsProjectExisting = projects.map(() => false); // Ensure flat array of booleans
+            if (!project) {
+                console.error("No project data available.");
+                return;
+            }
+            finalProject = project;
+            finalIsProjectExisting = false;
         }
 
-        // ✅ Construct the payload
         const payload = {
             name,
             image,
             description,
             instagram_url: instagramUrl,
-            projects: finalProjects[0], // This will no longer have an outer array if only one project
+            project: finalProject,
             is_project_existing: finalIsProjectExisting
         };
 
         try {
             await createArtist(payload);
-            console.log("✅ Request sent successfully!");
+            console.log("Request sent successfully!");
             navigate("/artists");
         } catch (error) {
             if (error instanceof Error) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                console.error("❌ Error sending request:", (error as any)?.response?.data || error.message);
+                console.error("Error sending request:", (error as any)?.response?.data || error.message);
             } else {
-                console.error("❌ An unknown error occurred:", error);
+                console.error("An unknown error occurred:", error);
             }
         }
     };
@@ -122,13 +135,19 @@ const CreateArtist: React.FC = () => {
             <h3 className="text-lg font-bold mt-4">Projects</h3>
 
             <label>Select a Project (Optional):</label>
-            <select title="dropdown" onChange={(e) => setSelectedProjectId(e.target.value || null)} className="w-full p-2 border rounded mb-4">
+            <select
+                title="dropdown"
+                onChange={(e) => setSelectedProjectId(e.target.value || null)}
+                className="w-full p-2 border rounded mb-4"
+            >
                 <option value="">-- Create New Project --</option>
-                {projectOptions.map((project) => (
-                    <option key={project.id} value={project.name}>
-                        {project.name}
-                    </option>
-                ))}
+                {Array.isArray(projectOptions) &&
+                    projectOptions.map((project: { id: string; name: string }) => (
+                        <option key={project.id} value={project.id}>
+                            {project.name}
+                        </option>
+                    ))
+                }
             </select>
 
             {/* Hide project fields when an existing project is selected */}
@@ -138,8 +157,8 @@ const CreateArtist: React.FC = () => {
                     <input
                         type="text"
                         onChange={(e) => {
-                            setProjects([{ ...projects[0], name: e.target.value }]);
-                            setIsProjectExisting([false]);
+                            setProject({ ...project, name: e.target.value });
+                            setIsProjectExisting(false);
                         }}
                         className="w-full p-2 border rounded mb-2"
                     />
@@ -148,8 +167,14 @@ const CreateArtist: React.FC = () => {
                     <input
                         type="text"
                         onChange={(e) => {
-                            setProjects([{ ...projects[0], location: { ...projects[0].location, name: e.target.value } }]);
-                            setIsProjectExisting([false]);
+                            setProject({
+                                ...project,
+                                location: {
+                                    ...project.location,
+                                    name: e.target.value
+                                }
+                            });
+                            setIsProjectExisting(false);
                         }}
                         className="w-full p-2 border rounded mb-2"
                     />
@@ -158,24 +183,36 @@ const CreateArtist: React.FC = () => {
                     <input
                         type="text"
                         onChange={(e) => {
-                            setProjects([{ ...projects[0], location: { ...projects[0].location, map_address: e.target.value } }]);
-                            setIsProjectExisting([false]);
+                            setProject({
+                                ...project,
+                                location: {
+                                    ...project.location,
+                                    map_address: e.target.value
+                                }
+                            });
+                            setIsProjectExisting(false);
                         }}
                         className="w-full p-2 border rounded mb-2"
                     />
 
                     <label>Project Image:</label>
                     <input type="file" onChange={(e) => handleImageUpload(e, (img) => {
-                        setProjects([{ ...projects[0], image: { ...img, id: "" } }]);
-                        setIsProjectExisting([false]);
+                        setProject({
+                            ...project,
+                            image: { ...img, id: "" }
+                        });
+                        setIsProjectExisting(false);
                     })} />
 
                     <label>YouTube URL:</label>
                     <input
                         type="text"
                         onChange={(e) => {
-                            setProjects([{ ...projects[0], youtube_url: e.target.value }]);
-                            setIsProjectExisting([false]);
+                            setProject({
+                                ...project,
+                                youtube_url: e.target.value
+                            });
+                            setIsProjectExisting(false);
                         }}
                         className="w-full p-2 border rounded mb-2"
                     />

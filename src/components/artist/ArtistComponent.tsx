@@ -23,7 +23,6 @@ function ArtistComponent() {
 
     const fetchImage = async (artistName: string, image: { mimetype: string; data: string }) => {
         try {
-            // Convert to Base64 URL
             const base64Url = `data:${image.mimetype};base64,${image.data}`;
 
             setImageUrls((prev) => ({ ...prev, [artistName]: base64Url }));

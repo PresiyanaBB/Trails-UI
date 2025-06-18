@@ -64,7 +64,6 @@
     height: 1.2em;
 }
 
-/* Large screens (1200px and up) */
 @media (min-width: 1200px) {
     .header-logo {
         height: 140px;
@@ -75,7 +74,6 @@
     }
 }
 
-/* Medium screens (992px to 1199px) */
 @media (max-width: 1199px) {
     .header-content {
         padding: 0 1.5rem;
@@ -90,7 +88,6 @@
     }
 }
 
-/* Tablets (768px to 991px) */
 @media (max-width: 991px) {
     .header-content {
         padding: 0 1rem;
@@ -111,7 +108,6 @@
     }
 }
 
-/* Mobile Landscape (576px to 767px) */
 @media (max-width: 767px) {
     .header-container {
         padding: 0.3rem 0;
@@ -131,7 +127,6 @@
     }
 }
 
-/* Mobile Portrait (up to 575px) */
 @media (max-width: 575px) {
     .header-container {
         padding: 0.2rem 0;
@@ -160,7 +155,6 @@
     }
 }
 
-/* Specific mobile device optimizations */
 @media (max-width: 412px) {
     .header-logo {
         height: 50px;
@@ -176,7 +170,6 @@
     }
 }
 
-/* iPhone SE and similar small devices */
 @media (max-width: 375px) {
     .header-logo {
         height: 45px;
@@ -192,7 +185,6 @@
     }
 }
 
-/* Ensure the mobile menu is properly styled */
 @media (max-width: 991px) {
     .navbar-collapse {
         background-color: rgba(0, 0, 0, 0.8);
