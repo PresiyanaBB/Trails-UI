@@ -1,17 +1,24 @@
 import { useState, useEffect } from "react";
 import { Artist } from "../../models";
 import { createProject } from "../../api/ProjectApi";
-import { getArtists, findArtistByName } from "../../api/ArtistApi";
+import { getArtists, getArtist } from "../../api/ArtistApi";
 import { useNavigate } from "react-router-dom";
 
 const CreateProject: React.FC = () => {
     const navigate = useNavigate();
     const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
     const [youtubeUrl, setYoutubeUrl] = useState("");
-    const [location, setLocation] = useState({ name: "", map_address: "" });
+    const [location, setLocation] = useState<{ name: string, map_address: string }>({ name: "", map_address: "" });
     const [image, setImage] = useState<{ mimetype: string; data: string }>({ mimetype: "", data: "" });
-    const [artists, setArtists] = useState<Artist[]>([]);
+    const [artists, setArtist] = useState<Artist>({
+        id: "",
+        name: "",
+        image: { id: "", mimetype: "", data: "" },
+        description: "",
+        instagram_url: "",
+        projects: null
+    });
+    const [, setIsArtistExisting] = useState<boolean>();
     const [artistOptions, setArtistOptions] = useState<Artist[]>([]);
     const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
     const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
@@ -26,14 +33,22 @@ const CreateProject: React.FC = () => {
 
     useEffect(() => {
         if (selectedArtistId) {
-            findArtistByName(selectedArtistId)
+            getArtist(selectedArtistId)
                 .then((response) => {
                     setSelectedArtist(response.data as Artist);
+                    setIsArtistExisting(true);
                 })
                 .catch((error) => console.error("Error fetching artist details:", error));
         } else {
             setSelectedArtist(null);
-            setArtists([]);
+            setArtist({
+                id: "",
+                name: "",
+                image: { id: "", mimetype: "", data: "" },
+                description: "",
+                instagram_url: "",
+                projects: null
+            });
         }
     }, [selectedArtistId]);
 
@@ -52,41 +67,43 @@ const CreateProject: React.FC = () => {
     };
 
     const sendRequest = async () => {
-        let finalArtists: Artist[] = [];
-        let finalIsArtistExisting: boolean[] = [];
+        let finalArtists: Artist;
+        let finalIsArtistExisting: boolean;
 
         if (selectedArtistId) {
             try {
-                const response = await findArtistByName(selectedArtistId);
-                finalArtists = [response.data as Artist];
-                finalIsArtistExisting = [true];
+                const response = await getArtist(selectedArtistId);
+                finalArtists = response.data as Artist;
+                finalIsArtistExisting = true;
             } catch (error) {
                 console.log("Error fetching artist details:", error);
                 return;
             }
         } else {
             finalArtists = artists;
-            finalIsArtistExisting = artists.map(() => false);
+            finalIsArtistExisting = false;
         }
 
         const payload = {
             name,
-            description,
             location,
             image,
             youtube_url: youtubeUrl,
-            artists: finalArtists[0],
+            artist: finalArtists,
             is_artist_existing: finalIsArtistExisting
         };
-
-        console.log(JSON.stringify(payload, null, 2));
 
         try {
             await createProject(payload);
             console.log("Project created successfully!");
             navigate("/archive");
         } catch (error) {
-            console.error("Error creating project:", error);
+            if (error instanceof Error) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                console.error("Error sending request:", (error as any)?.response?.data || error.message);
+            } else {
+                console.error("An unknown error occurred:", error);
+            }
         }
     };
 
@@ -106,9 +123,6 @@ const CreateProject: React.FC = () => {
             <label>Project Image:</label>
             <input type="file" onChange={(e) => handleImageUpload(e, setImage)} />
 
-            <label>Description:</label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2 border rounded mb-2" />
-
             <label>YouTube URL:</label>
             <input type="text" value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} className="w-full p-2 border rounded mb-2" />
 
@@ -118,7 +132,7 @@ const CreateProject: React.FC = () => {
             <select title="dropdown" onChange={(e) => setSelectedArtistId(e.target.value || null)} className="w-full p-2 border rounded mb-4">
                 <option value="">-- Add New Artist --</option>
                 {artistOptions.map((artist) => (
-                    <option key={artist.id} value={artist.name}>
+                    <option key={artist.id} value={artist.id}>
                         {artist.name}
                     </option>
                 ))}
@@ -129,23 +143,23 @@ const CreateProject: React.FC = () => {
                     <label>Artist Name:</label>
                     <input
                         type="text"
-                        onChange={(e) => setArtists([...artists, { id: "", name: e.target.value, image: { id: "", mimetype: "", data: "" }, description: "", instagram_url: "", projects: [] }])}
+                        onChange={(e) => setArtist({ ...artists, name: e.target.value })}
                         className="w-full p-2 border rounded mb-2"
                     />
 
                     <label>Artist Image:</label>
-                    <input type="file" onChange={(e) => handleImageUpload(e, (img) => setArtists([{ ...artists[0], image: { ...img, id: "" } }]))} />
+                    <input type="file" onChange={(e) => handleImageUpload(e, (img) => setArtist({ ...artists, image: { ...img, id: "" } }))} />
 
                     <label>Artist Description:</label>
                     <textarea
-                        onChange={(e) => setArtists([{ ...artists[0], description: e.target.value }])}
+                        onChange={(e) => setArtist({ ...artists, description: e.target.value })}
                         className="w-full p-2 border rounded mb-2"
                     />
 
                     <label>Instagram URL:</label>
                     <input
                         type="text"
-                        onChange={(e) => setArtists([{ ...artists[0], instagram_url: e.target.value }])}
+                        onChange={(e) => setArtist({ ...artists, instagram_url: e.target.value })}
                         className="w-full p-2 border rounded mb-2"
                     />
                 </>

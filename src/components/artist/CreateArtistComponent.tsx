@@ -35,8 +35,7 @@ const CreateArtist: React.FC = () => {
         if (selectedProjectId) {
             getProject(selectedProjectId)
                 .then((response) => {
-                    const projectData = response.data as Project;
-                    setSelectedProject(projectData);
+                    setSelectedProject(response.data as Project);
                     setIsProjectExisting(true);
                 })
                 .catch((error) => console.error("Error fetching project details:", error));
@@ -76,8 +75,7 @@ const CreateArtist: React.FC = () => {
         if (selectedProjectId) {
             try {
                 const response = await getProject(selectedProjectId);
-                const projectData = response.data as Project;
-                finalProject = projectData;
+                finalProject = response.data as Project;
                 finalIsProjectExisting = true;
             } catch (error) {
                 console.error("Error fetching project details:", error);
