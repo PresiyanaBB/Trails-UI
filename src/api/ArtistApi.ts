@@ -23,5 +23,5 @@ export const deleteArtist = async (id: string): Promise<AxiosResponse<unknown>> 
 };
 
 export const findArtistByName = async (name: string): Promise<AxiosResponse<unknown>> => {
-    return axios.get(`${API_URL}/name/${name}`);
+    return axios.get(`${API_URL}?name=${name}`);
 };

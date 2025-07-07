@@ -23,5 +23,5 @@ export const deleteProject = async (id: string): Promise<AxiosResponse<unknown>>
 };
 
 export const findProjectByName = async (name: string): Promise<AxiosResponse<unknown>> => {
-    return axios.get(`${API_URL}/name/${name}`);
+    return axios.get(`${API_URL}?name=${name}`);
 };
